@@ -14,3 +14,13 @@ class door_status:
     connected: bool | None = None
     last_open_time: str | None = None
     last_close_time: str | None = None
+
+
+def wifi_signal_percent(dbm: int | None) -> int | None:
+    if dbm is None:
+        return None
+    if dbm >= -50:
+        return 100
+    if dbm <= -100:
+        return 0
+    return round(2 * (dbm + 100))

@@ -610,7 +610,7 @@ if ($loxberryUi) {
         if (status.last_open_time) details.push('opened ' + new Date(status.last_open_time).toLocaleString());
         if (status.last_close_time) details.push('closed ' + new Date(status.last_close_time).toLocaleString());
         if (status.fault && status.fault !== 'none') details.push('fault ' + status.fault);
-        if (status.updated_at) details.push('updated ' + new Date(status.updated_at).toLocaleTimeString());
+        if (status.updated_at) details.push('last changed ' + new Date(status.updated_at).toLocaleTimeString());
         return details.join(' · ');
     }
 }());
@@ -669,7 +669,7 @@ function format_door_poll_status($status) {
         $details[] = 'fault ' . $status['fault'];
     }
     if (isset($status['updated_at']) && strtotime((string) $status['updated_at']) !== false) {
-        $details[] = 'updated ' . date('H:i:s', strtotime((string) $status['updated_at']));
+        $details[] = 'last changed ' . date('H:i:s', strtotime((string) $status['updated_at']));
     }
     return implode(' · ', $details);
 }

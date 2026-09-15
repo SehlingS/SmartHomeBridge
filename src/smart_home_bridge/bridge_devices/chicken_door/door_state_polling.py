@@ -6,7 +6,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from smart_home_bridge.bridge_devices.chicken_door.door_controller import door_controller
-from smart_home_bridge.bridge_devices.chicken_door.door_status import door_status
+from smart_home_bridge.bridge_devices.chicken_door.door_status import (
+    door_status,
+    wifi_signal_percent,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +87,7 @@ def _write_status_file(path: Path, status: door_status):
     path.parent.mkdir(parents=True, exist_ok=True)
     values = asdict(status)
     values["position"] = status.position.value
+    values["wifi_strength"] = wifi_signal_percent(status.wifi_strength)
     values["updated_at"] = datetime.now(timezone.utc).isoformat()
     temporary_path = path.with_suffix(path.suffix + ".tmp")
     temporary_path.write_text(

@@ -1,6 +1,6 @@
 #!/bin/sh
 # LoxBerry boot daemon: (re)starts the SmartHomeBridge service on every LoxBerry boot.
-# LoxBerry installs this as /opt/loxberry/system/daemons/plugins/<folder> and runs it
+# LoxBerry installs this as $LBHOMEDIR/system/daemons/plugins/<folder> and runs it
 # once, as root, during its boot sequence, in series with every other plugin's daemon
 # file -- it must return quickly and must never exit non-zero, or it can stall the
 # rest of LoxBerry's boot.

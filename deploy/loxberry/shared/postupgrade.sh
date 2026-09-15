@@ -11,8 +11,9 @@ BRIDGE_CTL="${LBPBIN:?}/${PLUGIN_FOLDER}/bridge_ctl.sh"
 RESTART_AFTER_UPGRADE=false
 
 mkdir -p "$CONFIG_DIR"
-if [ ! -f "$CONFIG_FILE" ] && [ -f "$BACKUP_FILE" ]; then
+if [ -f "$BACKUP_FILE" ]; then
     cp "$BACKUP_FILE" "$CONFIG_FILE"
+    rm -f "$BACKUP_FILE"
     echo "<OK> {{PLUGIN_TITLE}} config restored"
 else
     echo "<INFO> {{PLUGIN_TITLE}} config restore not required"

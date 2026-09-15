@@ -11,6 +11,9 @@ from smart_home_bridge.bridge_devices.chicken_door import (
     door_position,
     door_status,
 )
+from smart_home_bridge.bridge_devices.chicken_door.door_state_polling import (
+    _write_status_file,
+)
 
 
 def test_polling_publishes_every_successful_status_as_a_heartbeat():
@@ -229,6 +232,16 @@ class SignalingGateway:
     def get_state(self):
         self.called.set()
         return door_status(door_position.CLOSED)
+
+
+def test_write_status_file_converts_wifi_strength_dbm_to_percent(tmp_path):
+    status = door_status(door_position.CLOSED, wifi_strength=-54)
+    path = tmp_path / "door-poll-status.json"
+
+    _write_status_file(path, status)
+
+    written = json.loads(path.read_text())
+    assert written["wifi_strength"] == 92
 
 
 class ConcurrentGateway:

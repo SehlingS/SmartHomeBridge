@@ -5,7 +5,10 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 
 from smart_home_bridge.bridge_devices.chicken_door.chicken_door import door_position
-from smart_home_bridge.bridge_devices.chicken_door.door_status import door_status
+from smart_home_bridge.bridge_devices.chicken_door.door_status import (
+    door_status,
+    wifi_signal_percent,
+)
 
 DoorPublishFunction = Callable[..., Awaitable[None] | None]
 
@@ -48,7 +51,10 @@ class DoorMqttPublisher:
             (self.topics.last_open, status.last_open_time or ""),
             (self.topics.last_close, status.last_close_time or ""),
             (self.topics.power_source, status.power_source or "unknown"),
-            (self.topics.wifi_strength, str(_bounded_percent(status.wifi_strength, 0))),
+            (
+                self.topics.wifi_strength,
+                str(_bounded_percent(wifi_signal_percent(status.wifi_strength), 0)),
+            ),
         )
 
         for topic, payload in messages:

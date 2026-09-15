@@ -56,6 +56,40 @@ def test_missing_diagnostics_publish_sensible_defaults():
     ]
 
 
+def test_wifi_strength_dbm_is_converted_to_percent_not_clamped_to_zero():
+    published = []
+    publisher = DoorMqttPublisher(_topics(), _collect(published))
+
+    asyncio.run(
+        publisher.publish_status(
+            door_status(door_position.OPEN, wifi_strength=-54),
+        ),
+    )
+
+    assert published[-1] == ("base/chicken-door/wifi_strength", "92", True)
+
+
+def test_wifi_strength_saturates_at_100_and_0_percent():
+    strong_signal = []
+    publisher_strong = DoorMqttPublisher(_topics(), _collect(strong_signal))
+    asyncio.run(
+        publisher_strong.publish_status(
+            door_status(door_position.OPEN, wifi_strength=-42),
+        ),
+    )
+
+    weak_signal = []
+    publisher_weak = DoorMqttPublisher(_topics(), _collect(weak_signal))
+    asyncio.run(
+        publisher_weak.publish_status(
+            door_status(door_position.OPEN, wifi_strength=-100),
+        ),
+    )
+
+    assert strong_signal[-1] == ("base/chicken-door/wifi_strength", "100", True)
+    assert weak_signal[-1] == ("base/chicken-door/wifi_strength", "0", True)
+
+
 def test_fake_publish_can_collect_topic_and_payload_only():
     published = []
 
