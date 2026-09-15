@@ -605,6 +605,10 @@ if ($loxberryUi) {
         if (status.connected === false) details.push('offline');
         if (status.battery_level !== null && status.battery_level !== undefined) details.push('battery ' + status.battery_level + '%');
         if (status.light_level !== null && status.light_level !== undefined) details.push('light ' + status.light_level + '%');
+        if (status.power_source) details.push('power ' + status.power_source);
+        if (status.wifi_strength !== null && status.wifi_strength !== undefined) details.push('wifi ' + status.wifi_strength + '%');
+        if (status.last_open_time) details.push('opened ' + new Date(status.last_open_time).toLocaleString());
+        if (status.last_close_time) details.push('closed ' + new Date(status.last_close_time).toLocaleString());
         if (status.fault && status.fault !== 'none') details.push('fault ' + status.fault);
         if (status.updated_at) details.push('updated ' + new Date(status.updated_at).toLocaleTimeString());
         return details.join(' · ');
@@ -648,6 +652,18 @@ function format_door_poll_status($status) {
     }
     if (isset($status['light_level'])) {
         $details[] = 'light ' . (int) $status['light_level'] . '%';
+    }
+    if (($status['power_source'] ?? '') !== '') {
+        $details[] = 'power ' . $status['power_source'];
+    }
+    if (isset($status['wifi_strength'])) {
+        $details[] = 'wifi ' . (int) $status['wifi_strength'] . '%';
+    }
+    if (isset($status['last_open_time']) && strtotime((string) $status['last_open_time']) !== false) {
+        $details[] = 'opened ' . date('Y-m-d H:i', strtotime((string) $status['last_open_time']));
+    }
+    if (isset($status['last_close_time']) && strtotime((string) $status['last_close_time']) !== false) {
+        $details[] = 'closed ' . date('Y-m-d H:i', strtotime((string) $status['last_close_time']));
     }
     if (($status['fault'] ?? '') !== '' && ($status['fault'] ?? '') !== 'none') {
         $details[] = 'fault ' . $status['fault'];

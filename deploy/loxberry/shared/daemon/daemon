@@ -1,0 +1,21 @@
+#!/bin/sh
+# LoxBerry boot daemon: (re)starts the SmartHomeBridge service on every LoxBerry boot.
+# LoxBerry installs this as /opt/loxberry/system/daemons/plugins/<folder> and runs it
+# once, as root, during its boot sequence, in series with every other plugin's daemon
+# file -- it must return quickly and must never exit non-zero, or it can stall the
+# rest of LoxBerry's boot.
+
+PLUGIN_FOLDER="${PLUGIN_FOLDER:-{{PLUGIN_FOLDER}}}"
+BRIDGE_CTL="${LBPBIN}/${PLUGIN_FOLDER}/bridge_ctl.sh"
+
+if [ -x /usr/bin/logger ]; then
+    /usr/bin/logger "loxberry-plugin-${PLUGIN_FOLDER} - starting SmartHomeBridge at boot"
+fi
+
+if [ -x "$BRIDGE_CTL" ]; then
+    # Drop from root to the loxberry user so the PID/log files this creates keep
+    # the same ownership the web UI's Start/Stop/Restart buttons already expect.
+    su -p -s /bin/sh loxberry -c "'$BRIDGE_CTL' start" >/dev/null 2>&1
+fi
+
+exit 0

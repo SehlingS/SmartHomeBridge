@@ -88,6 +88,10 @@ def create_chicken_door_composition(
                         topics.battery,
                         topics.light_level,
                         topics.usage,
+                        topics.last_open,
+                        topics.last_close,
+                        topics.power_source,
+                        topics.wifi_strength,
                     ),
                 ),
             ),
@@ -137,4 +141,17 @@ def build_door_mqtt_topics(
             topic("light_level", "chicken-door/light_level"),
         ),
         usage=build_topic(base_topic, topic("usage", CHICKEN_DOOR_USAGE_TOPIC)),
+        last_open=build_topic(base_topic, topic("last_open", "chicken-door/last_open")),
+        last_close=build_topic(
+            base_topic,
+            topic("last_close", "chicken-door/last_close"),
+        ),
+        power_source=build_topic(
+            base_topic,
+            topic("power_source", "chicken-door/power_source"),
+        ),
+        wifi_strength=build_topic(
+            base_topic,
+            topic("wifi_strength", "chicken-door/wifi_strength"),
+        ),
     )

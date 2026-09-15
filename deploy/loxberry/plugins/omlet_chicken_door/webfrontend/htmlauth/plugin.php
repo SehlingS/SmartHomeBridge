@@ -28,6 +28,10 @@ $fieldSchema = array(
     'CHICKEN_DOOR_BATTERY_TOPIC' => array('label' => 'Battery topic', 'help' => 'Topic publishing the latest battery level.', 'type' => 'topic', 'group' => 'MQTT', 'required' => true),
     'CHICKEN_DOOR_LIGHT_LEVEL_TOPIC' => array('label' => 'Light level topic', 'help' => 'Topic publishing the door light sensor value.', 'type' => 'topic', 'group' => 'MQTT', 'required' => true),
     'CHICKEN_DOOR_USAGE_TOPIC' => array('label' => 'Usage event topic', 'help' => 'Topic publishing command usage as JSON. LoxBerry exposes its fields below this topic.', 'type' => 'topic', 'group' => 'MQTT', 'required' => true),
+    'CHICKEN_DOOR_LAST_OPEN_TOPIC' => array('label' => 'Last opened topic', 'help' => 'Topic publishing the timestamp of the last door opening.', 'type' => 'topic', 'group' => 'MQTT', 'required' => true),
+    'CHICKEN_DOOR_LAST_CLOSE_TOPIC' => array('label' => 'Last closed topic', 'help' => 'Topic publishing the timestamp of the last door closing.', 'type' => 'topic', 'group' => 'MQTT', 'required' => true),
+    'CHICKEN_DOOR_POWER_SOURCE_TOPIC' => array('label' => 'Power source topic', 'help' => 'Topic publishing whether the door runs on battery or mains power.', 'type' => 'topic', 'group' => 'MQTT', 'required' => true),
+    'CHICKEN_DOOR_WIFI_STRENGTH_TOPIC' => array('label' => 'WiFi strength topic', 'help' => 'Topic publishing the door\'s WiFi signal strength.', 'type' => 'topic', 'group' => 'MQTT', 'required' => true),
     'LOG_LEVEL' => array('label' => 'Log level', 'help' => 'INFO is recommended. Use DEBUG only while troubleshooting.', 'type' => 'select', 'group' => 'Logging', 'options' => array('ERROR' => 'Errors only', 'WARNING' => 'Warnings and errors', 'INFO' => 'Information', 'DEBUG' => 'Debug')),
     'LOG_FILE_PATH' => array('label' => 'Log file path', 'help' => 'Path relative to the plugin runtime unless an absolute path is supplied.', 'type' => 'text', 'group' => 'Logging', 'required' => true),
 );

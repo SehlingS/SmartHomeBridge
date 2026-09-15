@@ -253,6 +253,10 @@ smart-home-bridge/chicken-door/fault
 smart-home-bridge/chicken-door/connected
 smart-home-bridge/chicken-door/battery
 smart-home-bridge/chicken-door/light_level
+smart-home-bridge/chicken-door/last_open
+smart-home-bridge/chicken-door/last_close
+smart-home-bridge/chicken-door/power_source
+smart-home-bridge/chicken-door/wifi_strength
 ```
 
 `status` values:
@@ -286,6 +290,9 @@ Default diagnostic values are published when vendor data is missing:
 - `connected`: `1`
 - `battery`: `100`
 - `light_level`: `0`
+- `last_open` / `last_close`: empty string (ISO-8601 timestamp from the vendor API when available)
+- `power_source`: `unknown`
+- `wifi_strength`: `0`
 
 ## Chicken Threat Detector
 
@@ -546,6 +553,13 @@ shared payload in `deploy/loxberry/shared`. Each payload provides:
 - `plugin.cfg` at the archive root
 - lifecycle hooks for install, upgrade, and uninstall
 - `bin/bridge_ctl.sh` for service commands
+- `daemon/daemon`, LoxBerry's boot-time daemon hook: LoxBerry installs it to
+  `/opt/loxberry/system/daemons/plugins/<folder>` and runs it once, as root, on
+  every LoxBerry boot. It drops to the unprivileged `loxberry` user and calls
+  `bridge_ctl.sh start`, so the bridge comes back up automatically after a
+  reboot without any manual "Start" click. Because LoxBerry registers this file
+  at install/upgrade time, a plugin already installed before this file existed
+  needs a reinstall or upgrade (not just a reboot) to pick up autostart.
 - `config/smart-home-bridge.ini` for bridge settings
 - `webfrontend/htmlauth/index.php` for status, start/stop/restart,
   configuration editing, and log tail

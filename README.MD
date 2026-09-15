@@ -232,6 +232,11 @@ disk space, so run inference with Docker or install `.[inference]` manually on a
 larger host. The LoxBerry web UI exposes the bridge lifecycle, config checks,
 log tailing, and settings; manual door commands appear only in the door plugin.
 
+The plugin also registers a LoxBerry boot daemon (`daemon/daemon`) that starts
+the bridge automatically on every LoxBerry reboot, so it no longer needs a
+manual "Start" click after a restart. Plugins installed before this was added
+need one reinstall or upgrade for LoxBerry to pick up the new daemon file.
+
 Configuration comes from `.env` or process environment variables by default.
 LoxBerry installations can instead use `SMART_HOME_BRIDGE_CONFIG_SOURCE=loxberry`.
 

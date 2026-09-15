@@ -350,6 +350,26 @@ def _bridge_devices_config(values: Mapping[str, str]) -> BridgeDevicesConfig:
                         "CHICKEN_DOOR_USAGE_TOPIC",
                         "usage/door",
                     ),
+                    "last_open": _get(
+                        values,
+                        "CHICKEN_DOOR_LAST_OPEN_TOPIC",
+                        "chicken-door/last_open",
+                    ),
+                    "last_close": _get(
+                        values,
+                        "CHICKEN_DOOR_LAST_CLOSE_TOPIC",
+                        "chicken-door/last_close",
+                    ),
+                    "power_source": _get(
+                        values,
+                        "CHICKEN_DOOR_POWER_SOURCE_TOPIC",
+                        "chicken-door/power_source",
+                    ),
+                    "wifi_strength": _get(
+                        values,
+                        "CHICKEN_DOOR_WIFI_STRENGTH_TOPIC",
+                        "chicken-door/wifi_strength",
+                    ),
                 },
             ),
             "chicken_thread_detector": BridgeDeviceConfig(

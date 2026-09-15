@@ -75,6 +75,7 @@ def test_each_archive_combines_shared_runtime_with_device_profile(tmp_path):
         "postupgrade.sh",
         "uninstall/uninstall",
         "bin/bridge_ctl.sh",
+        "daemon/daemon",
         "icons/icon.svg",
         "icons/icon_64.png",
         "icons/icon_128.png",
@@ -113,7 +114,7 @@ def test_omlet_plugin_contains_only_door_configuration(tmp_path):
     plugin_config.read_string(text["plugin.cfg"])
     assert plugin_config["PLUGIN"]["FOLDER"] == "omletchickendoor"
     assert plugin_config["PLUGIN"]["TITLE"] == "OmletChickenDoorPlugin"
-    assert plugin_config["PLUGIN"]["VERSION"] == "4.0.1"
+    assert plugin_config["PLUGIN"]["VERSION"] == "4.1.0-fork1"
     assert plugin_config["SYSTEM"]["INTERFACE"] == "2.0"
     assert "BRIDGE_DEVICES_ENABLED=chicken_door" in text[
         "config/smart-home-bridge.ini"
@@ -161,7 +162,7 @@ def test_camera_plugin_contains_only_camera_configuration(tmp_path):
     plugin_config.read_string(text["plugin.cfg"])
     assert plugin_config["PLUGIN"]["FOLDER"] == "chickenbarncamera"
     assert plugin_config["PLUGIN"]["TITLE"] == "ChickenBarnCameraPlugin"
-    assert plugin_config["PLUGIN"]["VERSION"] == "4.0.1"
+    assert plugin_config["PLUGIN"]["VERSION"] == "4.1.0-fork1"
     assert "BRIDGE_DEVICES_ENABLED=chicken_thread_detector" in text[
         "config/smart-home-bridge.ini"
     ]
@@ -380,10 +381,29 @@ def test_archives_mark_lifecycle_and_control_scripts_executable(tmp_path):
             "postupgrade.sh",
             "uninstall/uninstall",
             "bin/bridge_ctl.sh",
+            "daemon/daemon",
         ):
             mode = archive.getinfo(name).external_attr >> 16
             assert mode & 0o111
             assert b"\r\n" not in archive.read(name)
+
+
+def test_daemon_starts_the_bridge_as_the_loxberry_user_at_boot(tmp_path):
+    packager = load_loxberry_packager()
+    archive_path = packager.build_plugin_archive(
+        "omlet-chicken-door",
+        tmp_path / "door.zip",
+    )
+
+    with ZipFile(archive_path) as archive:
+        daemon = archive.read("daemon/daemon").decode()
+
+    assert 'PLUGIN_FOLDER="${PLUGIN_FOLDER:-omletchickendoor}"' in daemon
+    assert "{{" not in daemon and "}}" not in daemon
+    assert "su -p -s /bin/sh loxberry -c" in daemon
+    assert "'$BRIDGE_CTL' start" in daemon
+    assert 'BRIDGE_CTL="${LBPBIN}/${PLUGIN_FOLDER}/bridge_ctl.sh"' in daemon
+    assert daemon.strip().endswith("exit 0")
 
 
 def test_plugins_have_distinct_vector_and_generated_raster_icons(tmp_path):

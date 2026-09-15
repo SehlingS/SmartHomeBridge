@@ -308,7 +308,10 @@ def build_plugin_archive(
             data = _render_file(path, selected.replacements)
             info = ZipInfo.from_file(path, archive_path)
             permissions = stat.S_IMODE(path.stat().st_mode)
-            if path.suffix == ".sh" or archive_path == "uninstall/uninstall":
+            if (
+                path.suffix == ".sh"
+                or archive_path in ("uninstall/uninstall", "daemon/daemon")
+            ):
                 permissions |= stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
             info.external_attr = permissions << 16
             archive.writestr(info, data, compress_type=ZIP_DEFLATED)
@@ -346,7 +349,12 @@ def _collect_archive_files(shared_dir: Path, plugin_dir: Path) -> dict[str, Path
 
 def _render_file(path: Path, replacements: dict[bytes, bytes]) -> bytes:
     content = path.read_bytes()
-    if path.suffix == ".sh" or path.as_posix().endswith("uninstall/uninstall"):
+    posix_path = path.as_posix()
+    if (
+        path.suffix == ".sh"
+        or posix_path.endswith("uninstall/uninstall")
+        or posix_path.endswith("daemon/daemon")
+    ):
         content = content.replace(b"\r\n", b"\n")
     for placeholder, value in replacements.items():
         content = content.replace(placeholder, value)

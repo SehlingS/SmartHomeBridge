@@ -49,6 +49,10 @@ def test_missing_diagnostics_publish_sensible_defaults():
         ("base/chicken-door/connected", "1", True),
         ("base/chicken-door/battery", "100", True),
         ("base/chicken-door/light_level", "0", True),
+        ("base/chicken-door/last_open", "", True),
+        ("base/chicken-door/last_close", "", True),
+        ("base/chicken-door/power_source", "unknown", True),
+        ("base/chicken-door/wifi_strength", "0", True),
     ]
 
 
@@ -75,6 +79,10 @@ def _topics() -> DoorMqttTopics:
         battery="base/chicken-door/battery",
         light_level="base/chicken-door/light_level",
         usage="base/usage/door",
+        last_open="base/chicken-door/last_open",
+        last_close="base/chicken-door/last_close",
+        power_source="base/chicken-door/power_source",
+        wifi_strength="base/chicken-door/wifi_strength",
     )
 
 

@@ -282,15 +282,19 @@ def test_application_wires_door_commands_to_mqtt_publish():
 
     assert result.success is True
     assert result.data == door_position.OPEN
-    assert published[:6] == [
+    assert published[:10] == [
         ("loxone/chicken-door/status", "open", True),
         ("loxone/chicken-door/status_code", "1", True),
         ("loxone/chicken-door/fault", "none", True),
         ("loxone/chicken-door/connected", "1", True),
         ("loxone/chicken-door/battery", "100", True),
         ("loxone/chicken-door/light_level", "0", True),
+        ("loxone/chicken-door/last_open", "", True),
+        ("loxone/chicken-door/last_close", "", True),
+        ("loxone/chicken-door/power_source", "unknown", True),
+        ("loxone/chicken-door/wifi_strength", "0", True),
     ]
-    usage_topic, usage_payload, usage_retain = published[6]
+    usage_topic, usage_payload, usage_retain = published[10]
     usage = json.loads(usage_payload)
     assert usage_topic == "loxone/usage/door"
     assert usage_retain is False

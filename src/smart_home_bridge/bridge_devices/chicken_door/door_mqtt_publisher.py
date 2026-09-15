@@ -20,6 +20,10 @@ class DoorMqttTopics:
     battery: str
     light_level: str
     usage: str
+    last_open: str
+    last_close: str
+    power_source: str
+    wifi_strength: str
 
 
 class DoorMqttPublisher:
@@ -41,6 +45,10 @@ class DoorMqttPublisher:
             (self.topics.connected, "1" if _default_bool(status.connected, True) else "0"),
             (self.topics.battery, str(_bounded_percent(status.battery_level, 100))),
             (self.topics.light_level, str(_bounded_percent(status.light_level, 0))),
+            (self.topics.last_open, status.last_open_time or ""),
+            (self.topics.last_close, status.last_close_time or ""),
+            (self.topics.power_source, status.power_source or "unknown"),
+            (self.topics.wifi_strength, str(_bounded_percent(status.wifi_strength, 0))),
         )
 
         for topic, payload in messages:
